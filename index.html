@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halagel Helpdesk System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d7a3e 0%, #1a5c2a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 180px;
+            max-height: 60px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #2d7a3e;
+            margin-bottom: 5px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn-admin, .btn-logout {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-admin {
+            background: #4169E1;
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background: #365abd;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+        }
+
+        .admin-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .admin-link {
+            color: #2d7a3e;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card.waiting {
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+        }
+
+        .stat-card.progress {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+        }
+
+        .stat-card.completed {
+            background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+        }
+
+        .stat-card h3 {
+            font-size: 42px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-size: 18px;
+            color: #2d7a3e;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2d7a3e;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2d7a3e 0%, #1a5c2a 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 122, 62, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .tickets-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .tickets-title {
+            font-size: 18px;
+            color: #2d7a3e;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .no-tickets {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .no-tickets-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+
+        .ticket-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-left: 5px solid #2d7a3e;
+        }
+
+        .ticket-item.high {
+            border-left-color: #dc3545;
+        }
+
+        .ticket-item.medium {
+            border-left-color: #ffa726;
+        }
+
+        .ticket-item.low {
+            border-left-color: #4caf50;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ticket-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d7a3e;
+        }
+
+        .ticket-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-waiting {
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+        }
+
+        .status-progress {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+        }
+
+        .ticket-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .ticket-field {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .ticket-field-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .ticket-field-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ticket-description {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .ticket-description-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .ticket-description-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .ticket-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+        }
+
+        .btn-start:hover {
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+        }
+
+        .btn-complete:hover {
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .message.error {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        .modal-icon {
+            text-align: center;
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .modal-hint {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #2d7a3e 0%, #1a5c2a 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-badge {
+            background: #d4edda;
+            border: 2px solid #4caf50;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo" id="logoContainer">
+                <img src="https://halagel.com/wp-content/uploads/2023/10/Halagel-Logo.png" alt="Halagel Logo">
+            </div>
+            <h1>Helpdesk Ticketing System</h1>
+            
+            <div id="loginLink" class="admin-text">
+                IT Admin? <span class="admin-link" onclick="showLoginModal()">Login here</span>
+            </div>
+            
+            <div id="adminButtons" class="header-buttons hidden">
+                <button class="btn-admin" onclick="showSettingsModal()">⚙ Settings</button>
+                <button class="btn-logout" onclick="handleLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div id="messageBox" class="message hidden"></div>
+
+        <!-- Admin Badge -->
+        <div id="adminBadge" class="admin-badge hidden">
+            ✓ Logged in as Administrator
+        </div>
+
+        <!-- Stats -->
+        <div id="statsSection" class="stats-grid hidden">
+            <div class="stat-card waiting">
+                <h3 id="waitingCount">0</h3>
+                <p>Waiting</p>
+            </div>
+            <div class="stat-card progress">
+                <h3 id="progressCount">0</h3>
+                <p>In Progress</p>
+            </div>
+            <div class="stat-card completed">
+                <h3 id="completedCount">0</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+
+        <!-- Submit Form -->
+        <div class="form-card">
+            <h2 class="form-title">📝 Submit New Request</h2>
+            <form id="ticketForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" class="form-input" placeholder="your.email@halagel.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" class="form-input" placeholder="Your Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Department <span class="required">*</span></label>
+                    <select id="department" class="form-select" required>
+                        <option value="">Select Department</option>
+                        <option value="HR">HR</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Koop">Koop</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Production">Production</option>
+                        <option value="SCM">SCM</option>
+                        <option value="R&D">R&D</option>
+                        <option value="Creative">Creative</option>
+                        <option value="QA/QC">QA/QC</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Request Type <span class="required">*</span></label>
+                    <select id="requestType" class="form-select" required>
+                        <option value="">Select Request Type</option>
+                        <option value="Hardware Issue">🖥️ Hardware Issue</option>
+                        <option value="Software Issue">💾 Software Issue</option>
+                        <option value="Network Problem">🌐 Network Problem</option>
+                        <option value="Email Issue">📧 Email Issue</option>
+                        <option value="Access Request">🔑 Access Request</option>
+                        <option value="New Equipment">🆕 New Equipment</option>
+                        <option value="Password Reset">🔒 Password Reset</option>
+                        <option value="Printer Issue">🖨️ Printer Issue</option>
+                        <option value="Other">📋 Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority <span class="required">*</span></label>
+                    <select id="priority" class="form-select" required>
+                        <option value="">Select Priority</option>
+                        <option value="Low">🟢 Low - Can wait a few days</option>
+                        <option value="Medium">🟡 Medium - Within 24 hours</option>
+                        <option value="High">🔴 High - Urgent, work blocked</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description <span class="required">*</span></label>
+                    <textarea id="description" class="form-textarea" placeholder="Please provide detailed information..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preferred Time</label>
+                    <input type="datetime-local" id="preferredTime" class="form-input">
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    🚀 Submit Ticket
+                </button>
+            </form>
+        </div>
+
+        <!-- Tickets List -->
+        <div class="tickets-card">
+            <h2 id="ticketsTitle" class="tickets-title">📋 All Tickets</h2>
+            <div id="ticketsList">
+                <div class="no-tickets">
+                    <div class="no-tickets-icon">🎫</div>
+                    <p>No tickets yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            <div class="modal-icon">🔒</div>
+            <h2 class="modal-title">Admin Login</h2>
+            <input type="password" id="loginPassword" class="modal-input" placeholder="Enter admin password">
+            <p class="modal-hint">Default: admin123</p>
+            <button class="modal-btn" onclick="handleLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+            <div class="modal-icon">⚙️</div>
+            <h2 class="modal-title">Admin Settings</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Admin Email for Notifications</label>
+                <input type="email" id="adminEmail" class="modal-input" placeholder="admin@halagel.com">
+                <p class="modal-hint">You will receive email notifications for new tickets</p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Custom Logo URL</label>
+                <input type="url" id="logoUrl" class="modal-input" placeholder="https://example.com/logo.png">
+                <p class="modal-hint">Enter URL of your custom logo image</p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">New Password (min 6 chars)</label>
+                <input type="password" id="newPassword" class="modal-input" placeholder="Enter new password">
+            </div>
+
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="completionEmails" checked>
+                    <span class="form-label">Send completion emails to users</span>
+                </label>
+                <p class="modal-hint">Users will receive email when their ticket is completed</p>
+            </div>
+            
+            <button class="modal-btn" onclick="saveSettings()">Save Settings</button>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrNDr6JigQ8gVpuMWodN-dQMdWvuN9DMWN_7UtsfZ4IJJJRFRPH84x5uBMIniDwxatKA/exec';
+        let adminPassword = 'admin123';
+        let isAdmin = false;
+        let tickets = [];
+        let adminEmail = '';
+        let customLogoUrl = '';
+        let sendCompletionEmails = true;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminStatus();
+            loadSettings();
+            loadTickets();
+            setInterval(loadTickets, 30000);
+            
+            document.getElementById('ticketForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createTicket();
+            });
+            
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+        });
+
+        function checkAdminStatus() {
+            const savedStatus = sessionStorage.getItem('halagel-admin-status');
+            if (savedStatus === 'true') {
+                isAdmin = true;
+                updateAdminUI();
+            }
+        }
+
+        function updateAdminUI() {
+            document.getElementById('loginLink').classList.toggle('hidden', isAdmin);
+            document.getElementById('adminButtons').classList.toggle('hidden', !isAdmin);
+            document.getElementById('adminBadge').classList.toggle('hidden', !isAdmin);
+            document.getElementById('statsSection').classList.toggle('hidden', !isAdmin);
+            document.getElementById('ticketsTitle').innerHTML = isAdmin ? '🎫 All Tickets' : '📊 Recent Tickets';
+        }
+
+        async function loadSettings() {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getSettings');
+                const data = await response.json();
+                
+                if (data.success) {
+                    adminEmail = data.settings.adminEmail || '';
+                    customLogoUrl = data.settings.logoUrl || '';
+                    sendCompletionEmails = data.settings.sendCompletionEmails !== false;
+                    
+                    // Update logo if custom URL exists
+                    if (customLogoUrl) {
+                        updateLogo(customLogoUrl);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        function updateLogo(logoUrl) {
+            const logoContainer = document.getElementById('logoContainer');
+            if (logoUrl) {
+                logoContainer.innerHTML = `<img src="${logoUrl}" alt="Halagel Logo">`;
+            } else {
+                // Default Halagel logo from website
+                logoContainer.innerHTML = `<img src="https://halagel.com/wp-content/uploads/2023/10/Halagel-Logo.png" alt="Halagel Logo">`;
+            }
+        }
+
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message ${type}`;
+            msgBox.classList.remove('hidden');
+            setTimeout(() => msgBox.classList.add('hidden'), 5000);
+        }
+
+        async function loadTickets() {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getTickets');
+                const data = await response.json();
+                
+                if (data.success) {
+                    tickets = data.tickets || [];
+                    renderTickets();
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error loading tickets:', error);
+            }
+        }
+
+        function updateStats() {
+            if (!isAdmin) return;
+            
+            const waiting = tickets.filter(t => t.status === 'Waiting').length;
+            const progress = tickets.filter(t => t.status === 'In Progress').length;
+            const completed = tickets.filter(t => t.status === 'Completed').length;
+            
+            document.getElementById('waitingCount').textContent = waiting;
+            document.getElementById('progressCount').textContent = progress;
+            document.getElementById('completedCount').textContent = completed;
+        }
+
+        function renderTickets() {
+            const container = document.getElementById('ticketsList');
+            const displayTickets = isAdmin ? tickets : tickets.slice(0, 5);
+            
+            if (displayTickets.length === 0) {
+                container.innerHTML = `
+                    <div class="no-tickets">
+                        <div class="no-tickets-icon">🎫</div>
+                        <p>No tickets yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = displayTickets.map(ticket => `
+                <div class="ticket-item ${ticket.priority.toLowerCase()}">
+                    <div class="ticket-header">
+                        <span class="ticket-id">#${ticket.id}</span>
+                        <span class="ticket-status status-${ticket.status.toLowerCase().replace(' ', '')}">
+                            ${ticket.status}
+                        </span>
+                    </div>
+                    
+                    <div class="ticket-info">
+                        <div class="ticket-field">
+                            <div class="ticket-field-label">Name</div>
+                            <div class="ticket-field-value">${ticket.fullName}</div>
+                        </div>
+                        <div class="ticket-field">
+                            <div class="ticket-field-label">Department</div>
+                            <div class="ticket-field-value">${ticket.department}</div>
+                        </div>
+                        <div class="ticket-field">
+                            <div class="ticket-field-label">Request</div>
+                            <div class="ticket-field-value">${ticket.requestType}</div>
+                        </div>
+                        <div class="ticket-field">
+                            <div class="ticket-field-label">Priority</div>
+                            <div class="ticket-field-value">${ticket.priority}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ticket-description">
+                        <div class="ticket-description-label">Description</div>
+                        <div class="ticket-description-text">${ticket.description}</div>
+                    </div>
+                    
+                    <div class="ticket-date">
+                        Submitted: ${new Date(ticket.createdAt).toLocaleString()}
+                    </div>
+                    
+                    ${isAdmin && ticket.status !== 'Completed' ? `
+                        <div class="ticket-actions">
+                            ${ticket.status === 'Waiting' ? `
+                                <button class="btn-action btn-start" onclick="updateStatus(${ticket.id}, 'In Progress')">
+                                    ▶️ Start Working
+                                </button>
+                            ` : ''}
+                            ${ticket.status === 'In Progress' ? `
+                                <button class="btn-action btn-complete" onclick="updateStatus(${ticket.id}, 'Completed')">
+                                    ✅ Mark Complete
+                                </button>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function createTicket() {
+            const ticketData = {
+                email: document.getElementById('email').value,
+                fullName: document.getElementById('fullName').value,
+                department: document.getElementById('department').value,
+                requestType: document.getElementById('requestType').value,
+                priority: document.getElementById('priority').value,
+                description: document.getElementById('description').value,
+                preferredTime: document.getElementById('preferredTime').value,
+                status: 'Waiting',
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'create');
+                formData.append('data', JSON.stringify(ticketData));
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('ticketForm').reset();
+                    showMessage('✅ Ticket submitted successfully!', 'success');
+                    loadTickets();
+                } else {
+                    showMessage('Failed to submit ticket: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showMessage('Error submitting ticket. Please try again.', 'error');
+            }
+        }
+
+        async function updateStatus(ticketId, newStatus) {
+            if (!isAdmin) {
+                showMessage('Only admin can update status!', 'error');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'update');
+                formData.append('id', ticketId);
+                formData.append('status', newStatus);
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Ticket updated to ' + newStatus, 'success');
+                    loadTickets();
+                } else {
+                    showMessage('Failed to update ticket', 'error');
+                }
+            } catch (error) {
+                showMessage('Error updating ticket', 'error');
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('show');
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function handleLogin() {
+            const password = document.getElementById('loginPassword').value;
+            if (password === adminPassword) {
+                isAdmin = true;
+                sessionStorage.setItem('halagel-admin-status', 'true');
+                updateAdminUI();
+                closeLoginModal();
+                showMessage('✓ Logged in successfully', 'success');
+                loadTickets();
+            } else {
+                showMessage('Incorrect password!', 'error');
+            }
+        }
+
+        function handleLogout() {
+            isAdmin = false;
+            sessionStorage.removeItem('halagel-admin-status');
+            updateAdminUI();
+            showMessage('Logged out', 'success');
+            renderTickets();
+        }
+
+        function showSettingsModal() {
+            document.getElementById('adminEmail').value = adminEmail;
+            document.getElementById('logoUrl').value = customLogoUrl;
+            document.getElementById('newPassword').value = '';
+            document.getElementById('completionEmails').checked = sendCompletionEmails;
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('show');
+            document.getElementById('newPassword').value = '';
+        }
+
+        async function saveSettings() {
+            const newPass = document.getElementById('newPassword').value;
+            const newAdminEmail = document.getElementById('adminEmail').value;
+            const newLogoUrl = document.getElementById('logoUrl').value;
+            const newCompletionEmails = document.getElementById('completionEmails').checked;
+            
+            try {
+                // Update password locally if provided
+                if (newPass && newPass.length >= 6) {
+                    adminPassword = newPass;
+                }
+                
+                // Update completion emails setting
+                sendCompletionEmails = newCompletionEmails;
+                
+                // Update settings on server
+                const formData = new FormData();
+                formData.append('action', 'updateSettings');
+                if (newAdminEmail) {
+                    formData.append('adminEmail', newAdminEmail);
+                }
+                if (newLogoUrl) {
+                    formData.append('logoUrl', newLogoUrl);
+                }
+                formData.append('sendCompletionEmails', newCompletionEmails);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update logo immediately
+                    if (newLogoUrl) {
+                        customLogoUrl = newLogoUrl;
+                        updateLogo(newLogoUrl);
+                    }
+                    
+                    if (newAdminEmail) {
+                        adminEmail = newAdminEmail;
+                    }
+                    
+                    closeSettingsModal();
+                    showMessage('Settings saved successfully!', 'success');
+                } else {
+                    showMessage('Failed to save settings: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                showMessage('Error saving settings', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
